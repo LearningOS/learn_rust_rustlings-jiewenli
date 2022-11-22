@@ -33,10 +33,22 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+// I AM DONE
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.is_empty() {
+            return Person::default();
+        }
+        s.split_once(',').map(|t| {
+            if t.0.trim().is_empty() {
+                return Person::default();
+            }
+            if t.1.parse::<usize>().is_err() {
+                return Person::default();
+            }
+            return Person {name: t.0.trim().to_string(), age: t.1.parse::<usize>().unwrap()};
+        }).unwrap_or_else(|| Person::default())
     }
 }
 
